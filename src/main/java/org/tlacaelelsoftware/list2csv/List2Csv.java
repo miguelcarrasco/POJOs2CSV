@@ -7,7 +7,7 @@ import java.util.List;
 
 public class List2Csv {
 
-    public static String convertToCsvString(List<Object> list) throws IllegalAccessException {
+    public static String convertToCsvString(List list) throws IllegalAccessException {
 
         // Obtaining the base class of the objects in the list.
         Class baseClass = list.iterator().next().getClass();
@@ -31,7 +31,7 @@ public class List2Csv {
         return csv;
     }
 
-    public static String getFieldContentAsCsv(Field field, Object obj) throws IllegalAccessException {
+    private static String getFieldContentAsCsv(Field field, Object obj) throws IllegalAccessException {
         Object value = field.get(obj);
         if(value == null){
             return "";
@@ -39,7 +39,7 @@ public class List2Csv {
         return value.toString().replaceAll("\"","\"\"");
     }
 
-    public static String getCsvRow(Object obj, List<Field> fieldsList) throws IllegalAccessException {
+    private static String getCsvRow(Object obj, List<Field> fieldsList) throws IllegalAccessException {
         String csvRow = "";
 
         Iterator<Field> iterator = fieldsList.iterator();
@@ -55,7 +55,7 @@ public class List2Csv {
         return csvRow;
     }
 
-    public static String getCsvHeader(List<Field> fieldsList) {
+    private static String getCsvHeader(List<Field> fieldsList) {
         String csvHeader = "";
 
         Iterator<Field> fieldListIterator = fieldsList.iterator();

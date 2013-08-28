@@ -8,6 +8,7 @@
     <artifactId>list2csv</artifactId>
     <version>0.1Beta</version>
 
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
