@@ -6,7 +6,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-public class List2CsvTest {
+public class Collection2CsvTest {
     @Test
     public void testConvertToCsvString() throws Exception {
 
@@ -21,7 +21,7 @@ public class List2CsvTest {
                         "\"test, \"\"user\"\"\",\"another@test.org\",\"2\"";
 
         Assert.assertEquals("The expected csv must be equal to the convertToCsvString() output",
-                List2Csv.convertToCsvString(list), expectedCsv);
+                Collection2Csv.convertToCsvString(list), expectedCsv);
     }
 }
 

@@ -2,15 +2,16 @@ package org.tlacaelelsoftware.list2csv;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-public class List2Csv {
+public class Collection2Csv {
 
-    public static String convertToCsvString(List list) throws IllegalAccessException {
+    public static String convertToCsvString(Collection collection) throws IllegalAccessException {
 
         // Obtaining the base class of the objects in the list.
-        Class baseClass = list.iterator().next().getClass();
+        Class baseClass = collection.iterator().next().getClass();
 
         // Obtaining a list of fields using reflection
         List<Field> fieldsList = Arrays.asList(baseClass.getDeclaredFields());
@@ -19,7 +20,7 @@ public class List2Csv {
         String csv = getCsvHeader(fieldsList) + "\n";
 
         // Fill the content in the csv rows.
-        Iterator iterator = list.iterator();
+        Iterator iterator = collection.iterator();
         while (iterator.hasNext()) {
             Object obj = iterator.next();
             csv += getCsvRow(obj, fieldsList);

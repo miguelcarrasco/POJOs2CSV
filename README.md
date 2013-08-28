@@ -1,7 +1,7 @@
-list2csv
+collection2csv
 =======
 
-Simple utility to convert java.util.List collections into CSV strings
+Simple utility to convert generic java.util.Collection collections into CSV strings
 
 (This is a work in progress, it should not be used until a stable release)
 
