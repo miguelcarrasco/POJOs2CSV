@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class Collection2CsvTest {
     @Test
@@ -39,6 +40,20 @@ public class Collection2CsvTest {
 
         Assert.assertEquals("The expected csv must be equal to the convertToCsvString() output",
                 expectedCsv, Collection2Csv.convertToCsvString(list));
+    }
+
+    @Test
+    public void testConvertToCsvStringEmptyCollections() throws Exception {
+        List<SimplePOJOForTest> list = new ArrayList<SimplePOJOForTest>();
+
+        String expectedCsv = "\"user\",\"email\",\"userId\"";
+
+        try {
+            Collection2Csv.convertToCsvString(list);
+            Assert.fail("A NoSuchElementException must be throwed");
+        } catch (NoSuchElementException e) {
+            // Assert passed
+        }
     }
 }
 

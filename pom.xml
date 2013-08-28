@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.tlacaelelsoftware.utils</groupId>
-    <artifactId>list2csv</artifactId>
-    <version>0.1Beta</version>
+    <artifactId>collectiont2csv</artifactId>
+    <version>1.0-SNAPSHOT</version>
 
 
     <dependencies>

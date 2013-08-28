@@ -1,17 +1,44 @@
 package org.tlacaelelsoftware.collection2csv;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
+/**
+ * Contain methods to convert java.util.Collection collections into CSV String representations.
+ *
+ * @author Miguel Angel Carrasco Wens
+ * @version 1.0-SNAPSHOT
+ */
 public class Collection2Csv {
 
-    public static String convertToCsvString(Collection collection) throws IllegalAccessException {
-
+    /**
+     * Convert a collection of elements into a CSV String representation .
+     *
+     * @param collection a non-empty Collection.
+     * @return a CSV String representation of the collection.
+     * @throws IllegalAccessException
+     * @throws NoSuchElementException when the collection is empty.
+     */
+    public static String convertToCsvString(Collection collection) throws IllegalAccessException, NoSuchElementException {
+        if (collection.isEmpty()) {
+            throw new NoSuchElementException("The specified collection must not be empty");
+        }
         // Obtaining the base class of the objects in the list.
         Class baseClass = collection.iterator().next().getClass();
+
+        return convertToCsvString(collection, baseClass);
+    }
+
+    /**
+     * Convert a collection of elements into a CSV String representation
+     *
+     * @param collection a Collection
+     * @param baseClass  the class of the collection elements, i.e. if the collection passed is a list of
+     *                   the type List<SomeClass>, then baseClass is SomeClass.class
+     * @return a CSV String representation of the collection.
+     * @throws IllegalAccessException
+     */
+    public static String convertToCsvString(Collection collection, Class baseClass) throws IllegalAccessException {
 
         // Obtaining a list of fields using reflection
         List<Field> fieldsList = Arrays.asList(baseClass.getDeclaredFields());
@@ -101,9 +128,9 @@ public class Collection2Csv {
         return csvHeader;
     }
 
-    private static String removeLastCharacter(String str){
+    private static String removeLastCharacter(String str) {
         if (str.length() > 0) {
-            str = str.substring(0, str.length()-1);
+            str = str.substring(0, str.length() - 1);
         }
         return str;
     }
