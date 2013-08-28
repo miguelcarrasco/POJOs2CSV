@@ -1,4 +1,4 @@
-package org.tlacaelelsoftware.list2csv;
+package org.tlacaelelsoftware.collection2csv;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -34,10 +34,10 @@ public class Collection2Csv {
 
     private static String getFieldContentAsCsv(Field field, Object obj) throws IllegalAccessException {
         Object value = field.get(obj);
-        if(value == null){
+        if (value == null) {
             return "";
         }
-        return value.toString().replaceAll("\"","\"\"");
+        return value.toString().replaceAll("\"", "\"\"");
     }
 
     private static String getCsvRow(Object obj, List<Field> fieldsList) throws IllegalAccessException {
@@ -48,7 +48,19 @@ public class Collection2Csv {
         while (iterator.hasNext()) {
             Field field = iterator.next();
             field.setAccessible(true);
-            csvRow += "\"" + getFieldContentAsCsv(field,obj) + "\"";
+
+            CSVField csvFieldAnnotation = field.getAnnotation(CSVField.class);
+            if (csvFieldAnnotation != null) {
+                // If it's annotated with @CSVField(ignore=true) then...
+                if (csvFieldAnnotation.ignore()) {
+                    // remove the last comma character and continue
+                    csvRow = removeLastCharacter(csvRow);
+                    continue;
+                }
+            }
+
+            csvRow += "\"" + getFieldContentAsCsv(field, obj) + "\"";
+
             if (iterator.hasNext()) {
                 csvRow += ",";
             }
@@ -63,12 +75,36 @@ public class Collection2Csv {
 
         while (fieldListIterator.hasNext()) {
             Field field = fieldListIterator.next();
-            csvHeader += "\"" + field.getName() + "\"";
+
+            CSVField csvFieldAnnotation = field.getAnnotation(CSVField.class);
+            if (csvFieldAnnotation != null) {
+
+                // If it's annotated with @CSVField(ignore=true) then...
+                if (csvFieldAnnotation.ignore()) {
+                    // remove the last comma character and continue
+                    csvHeader = removeLastCharacter(csvHeader);
+                    continue;
+                } else {
+                    // set the header field using the @CSVField(name="specified name") specified name
+                    csvHeader += "\"" + csvFieldAnnotation.name().replaceAll("\"", "\"\"") + "\"";
+                }
+
+            } else {
+                csvHeader += "\"" + field.getName() + "\"";
+            }
+
             if (fieldListIterator.hasNext()) {
                 csvHeader += ",";
             }
         }
 
         return csvHeader;
+    }
+
+    private static String removeLastCharacter(String str){
+        if (str.length() > 0) {
+            str = str.substring(0, str.length()-1);
+        }
+        return str;
     }
 }
