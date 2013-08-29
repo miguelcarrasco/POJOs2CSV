@@ -122,4 +122,4 @@ Then `Collection2Csv.convertToCsvString(usersList)` will return this CSV string:
 
 Author
 ------
-Miguel Ángel Carrasco Wens (<tlacaelel.software@gmail.com>)
+* Miguel Ángel Carrasco Wens (<tlacaelel.software@gmail.com>)
