@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.tlacaelelsoftware.utils</groupId>
-    <artifactId>collectiont2csv</artifactId>
+    <artifactId>collection2csv</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
