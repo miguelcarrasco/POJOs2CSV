@@ -80,8 +80,10 @@ public class Collection2Csv {
             if (csvFieldAnnotation != null) {
                 // If it's annotated with @CSVField(ignore=true) then...
                 if (csvFieldAnnotation.ignore()) {
-                    // remove the last comma character and continue
-                    csvRow = removeLastCharacter(csvRow);
+                    // remove the last comma character if it's the last field in the row
+                    if(!iterator.hasNext()){
+                        csvRow = removeLastCharacter(csvRow);
+                    }
                     continue;
                 }
             }
@@ -108,8 +110,10 @@ public class Collection2Csv {
 
                 // If it's annotated with @CSVField(ignore=true) then...
                 if (csvFieldAnnotation.ignore()) {
-                    // remove the last comma character and continue
-                    csvHeader = removeLastCharacter(csvHeader);
+                    // remove the last comma character if it's the last field in the row
+                    if(!fieldListIterator.hasNext()){
+                        csvHeader = removeLastCharacter(csvHeader);
+                    }
                     continue;
                 } else {
                     // set the header field using the @CSVField(name="specified name") specified name
