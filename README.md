@@ -89,7 +89,7 @@ you can do this using the annotation `@CSVField(ignore=true)` to tell `convertTo
 "ignore" that field.
 
 So in the previous example if we add the `@CSVField(ignore=true)` annotation to the phone field
-like this:
+in the User class:
 
 ```java
 public class User{
