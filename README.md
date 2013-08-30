@@ -6,6 +6,8 @@ Simple utility to convert generic collections (java.util.Collection) into CSV st
 This is special useful when you get a collection like a list from an ORM and you want
 a CSV string representation of the elements of the list (to generate reports for example).
 
+(This work is in beta stage, not ready for production yet)
+
 Usage
 -----
 
