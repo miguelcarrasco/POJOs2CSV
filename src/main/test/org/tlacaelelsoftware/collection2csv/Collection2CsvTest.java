@@ -2,6 +2,10 @@ package org.tlacaelelsoftware.collection2csv;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.tlacaelelsoftware.collection2csv.testhelpers.SimpleAnnotatedPOJOForTest;
+import org.tlacaelelsoftware.collection2csv.testhelpers.SimpleAnnotatedPOJOForTest2;
+import org.tlacaelelsoftware.collection2csv.testhelpers.SimplePOJOForTest;
+import org.tlacaelelsoftware.collection2csv.testhelpers.SimplePojo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,14 +16,12 @@ public class Collection2CsvTest {
     public void testConvertToCsvString() throws Exception {
 
         // Constructing a list with two elements.
-        List<SimplePOJOForTest> list = new ArrayList<SimplePOJOForTest>();
-        list.add(new SimplePOJOForTest("testuser", "test@test.org", (long) 1));
-        list.add(new SimplePOJOForTest("test, \"user\"", "another@test.org", (long) 2));
+        List<SimplePojo> list = getListForTest(SimplePOJOForTest.class);
 
         String expectedCsv =
-                "\"user\",\"email\",\"userId\"\n" +
-                        "\"testuser\",\"test@test.org\",\"1\"\n" +
-                        "\"test, \"\"user\"\"\",\"another@test.org\",\"2\"";
+                "\"user\",\"email\",\"userId\",\"phone\"\n" +
+                        "\"testuser\",\"test@test.org\",\"1\",\"12345\"\n" +
+                        "\"test, \"\"user\"\"\",\"another@test.org\",\"2\",\"12345\"";
 
         Assert.assertEquals("The expected csv must be equal to the convertToCsvString() output",
                 expectedCsv, Collection2Csv.convertToCsvString(list));
@@ -29,9 +31,7 @@ public class Collection2CsvTest {
     @Test
     public void testConvertToCsvStringWithAnnotations() throws Exception {
         // Constructing a list with two annotated elements.
-        List<SimpleAnnotatedPOJOForTest> list = new ArrayList<SimpleAnnotatedPOJOForTest>();
-        list.add(new SimpleAnnotatedPOJOForTest("testuser", "test@test.org", (long) 1,"12345"));
-        list.add(new SimpleAnnotatedPOJOForTest("test, \"user\"", "another@test.org", (long) 2,"12345"));
+        List<SimplePojo> list = getListForTest(SimpleAnnotatedPOJOForTest.class);
 
         String expectedCsv =
                 "\"User\",\"Email\",\"Phone\"\n" +
@@ -45,9 +45,7 @@ public class Collection2CsvTest {
     @Test
     public void testConvertToCsvStringWithDifferentAnnotations() throws Exception {
         // Constructing a list with two annotated elements.
-        List<SimpleAnnotatedPOJOForTest2> list = new ArrayList<SimpleAnnotatedPOJOForTest2>();
-        list.add(new SimpleAnnotatedPOJOForTest2("testuser", "test@test.org", (long) 1,"12345"));
-        list.add(new SimpleAnnotatedPOJOForTest2("test, \"user\"", "another@test.org", (long) 2,"12345"));
+        List<SimplePojo> list = getListForTest(SimpleAnnotatedPOJOForTest2.class);
 
         String expectedCsv =
                 "\"User\",\"Email\",\"UserId\"\n" +
@@ -71,144 +69,21 @@ public class Collection2CsvTest {
             // Assert passed
         }
     }
-}
 
-//----------------------------------- Helper Classes ---------------------------------------------
+    private List<SimplePojo> getListForTest(Class simplePojoClass)
+            throws IllegalAccessException, InstantiationException {
 
-/**
- * A Simple Plain Old Java Object (POJO) to test
- * csv conversion
- */
-class SimplePOJOForTest {
-    private String user;
-    private String email;
-    private Long userId;
+        List<SimplePojo> simplePojoList = new ArrayList<SimplePojo>();
 
-    SimplePOJOForTest(String user, String email, Long userId) {
-        this.user = user;
-        this.email = email;
-        this.userId = userId;
-    }
+        SimplePojo row1 = (SimplePojo) simplePojoClass.newInstance();
+        row1.fakeConstructor("testuser", "test@test.org", (long) 1, "12345");
 
-    String getUser() {
-        return user;
-    }
+        SimplePojo row2 = (SimplePojo) simplePojoClass.newInstance();
+        row2.fakeConstructor("test, \"user\"", "another@test.org", (long) 2, "12345");
 
-    void setUser(String user) {
-        this.user = user;
-    }
+        simplePojoList.add(row1);
+        simplePojoList.add(row2);
 
-    String getEmail() {
-        return email;
-    }
-
-    void setEmail(String email) {
-        this.email = email;
-    }
-
-    Long getUserId() {
-        return userId;
-    }
-
-    void setUserId(Long userId) {
-        this.userId = userId;
-    }
-}
-
-
-/**
- * A Simple Plain Old Java Object (POJO) with annotation
- * to test csv conversion.
- */
-class SimpleAnnotatedPOJOForTest {
-    @CSVField(name = "User")
-    private String user;
-
-    @CSVField(name = "Email")
-    private String email;
-
-    @CSVField(ignore = true)
-    private Long userId;
-
-    @CSVField(name="Phone")
-    private String phone;
-
-    SimpleAnnotatedPOJOForTest(String user, String email, Long userId, String phone) {
-        this.user = user;
-        this.email = email;
-        this.userId = userId;
-        this.phone = phone;
-    }
-
-    String getUser() {
-        return user;
-    }
-
-    void setUser(String user) {
-        this.user = user;
-    }
-
-    String getEmail() {
-        return email;
-    }
-
-    void setEmail(String email) {
-        this.email = email;
-    }
-
-    Long getUserId() {
-        return userId;
-    }
-
-    void setUserId(Long userId) {
-        this.userId = userId;
-    }
-}
-/**
- * A Simple Plain Old Java Object (POJO) with annotation
- * to test csv conversion.
- */
-class SimpleAnnotatedPOJOForTest2 {
-    @CSVField(name = "User")
-    private String user;
-
-    @CSVField(name = "Email")
-    private String email;
-
-    @CSVField(name="UserId")
-    private Long userId;
-
-    @CSVField(ignore=true)
-    private String phone;
-
-    SimpleAnnotatedPOJOForTest2(String user, String email, Long userId, String phone) {
-        this.user = user;
-        this.email = email;
-        this.userId = userId;
-        this.phone = phone;
-    }
-
-    String getUser() {
-        return user;
-    }
-
-    void setUser(String user) {
-        this.user = user;
-    }
-
-    String getEmail() {
-        return email;
-    }
-
-    void setEmail(String email) {
-        this.email = email;
-    }
-
-    Long getUserId() {
-        return userId;
-    }
-
-    void setUserId(Long userId) {
-        this.userId = userId;
+        return simplePojoList;
     }
 }
