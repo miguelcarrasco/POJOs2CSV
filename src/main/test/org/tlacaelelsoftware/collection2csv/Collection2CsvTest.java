@@ -13,7 +13,26 @@ import java.util.NoSuchElementException;
 
 public class Collection2CsvTest {
     @Test
-    public void testConvertToCsvString() throws Exception {
+    public void testConvertToCsvStringRFC4180Compliance() throws Exception {
+        List<SimplePOJOForTest> list = new ArrayList<SimplePOJOForTest>();
+
+        // adding a SimplePOJOForTest with line breaks, commas, spaces and double quotes in fields.
+        list.add(new SimplePOJOForTest("user \n name", "user@test.org, user2@test.org", (long) 1, "12345 or \"54321\""));
+        list.add(new SimplePOJOForTest("other \n \"user\"", "other@test.org, \"other2@test.org\"", (long) 1, "555111222,\"555222111\""));
+
+        // According to the RFC4180 the expected csv must equal to this
+        // (forcing the use of double quotes in all fields)
+        String expectedCsv =
+                "\"user\",\"email\",\"userId\",\"phone\"\n" +
+                        "\"user \n name\",\"user@test.org, user2@test.org\",\"1\",\"12345 or \"\"54321\"\"\"\n" +
+                        "\"other \n \"\"user\"\"\",\"other@test.org, \"\"other2@test.org\"\"\",\"1\",\"555111222,\"\"555222111\"\"\"";
+
+        Assert.assertEquals("The expected csv must be equal to the convertToCsvString() output",
+                expectedCsv, Collection2Csv.convertToCsvString(list));
+    }
+
+    @Test
+    public void testConvertToCsvStringWithoutAnnotations() throws Exception {
 
         // Constructing a list with two elements.
         List<SimplePojo> list = getListForTest(SimplePOJOForTest.class);
@@ -69,6 +88,7 @@ public class Collection2CsvTest {
             // Assert passed
         }
     }
+
 
     private List<SimplePojo> getListForTest(Class simplePojoClass)
             throws IllegalAccessException, InstantiationException {
