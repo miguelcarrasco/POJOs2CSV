@@ -167,6 +167,12 @@ Limitations
 * Currently it doesn't work with inheritance, i.e. if the type of objects in your collection extends from another
 class, the generated CSV String will not include the superclass fields (In future versions it will be supported).
 
-Author
+Credits
 ------
-* Miguel Ángel Carrasco Wens (<tlacaelel.software@gmail.com>)
+* Miguel Ángel Carrasco Wens (<tlacaelel.software@gmail.com>) (original author).
+
+License
+-------
+Copyright 2013 Miguel Ángel Carrasco Wens (<tlacaelel.software@gmail.com>)
+
+Released under the MIT License.
