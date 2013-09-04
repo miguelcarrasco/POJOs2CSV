@@ -8,8 +8,26 @@ a CSV string representation of the elements of the list (to generate reports for
 
 Usage
 -----
+Download [collection2csv-0.1.0-SNAPSHOT.jar](https://github.com/miguelcarrasco/collection2csv/releases/download/0.1.0-SNAPSHOT/collection2csv-0.1.0-SNAPSHOT.jar)
+and put it in your project classpath.
 
-As an example, consider the following class:
+> If you want to build the latest jar version by yourself, you need to install [maven](http://maven.apache.org/), 
+clone this repository and execute:
+
+> `mvn package` (inside the repository directory)
+
+> This will buid the project generating the jar file in `[REPOSITORY_DIR]/target/collection2csv-x.x.x-SNAPSHOT.jar`
+
+###Transform a collection into a CSV String
+To transform a collection (any object that implement a subinterface of java.util.Collection like java.util.List or java.util.Set) into a CSV String,
+use the `convertToCsvString()` method:
+
+```java
+String csv = Collection2Csv.convertToCsvString(yourcollection);
+```
+
+####Example
+Consider the following class:
 
 ```java
 public class User{
@@ -27,7 +45,7 @@ public class User{
     ...
 }
 ```
-and this java.util.List (a subinterface of java.util.Collection) of Users:
+and the userList ArrayList, an implementation of java.util.List (a subinterface of java.util.Collection) of Users:
 ```java
 List<User> usersList = new ArrayList<User>();
 usersList.add(new User("John","Doe",(long)555123123));
@@ -35,11 +53,11 @@ usersList.add(new User("Andrey","Kolmogorov",(long)888123123));
 usersList.add(new User("Évariste","Galois",(long)555121298));
 ```
 
-Then, if you use the convertToCsvString method:
+Then, if you use the convertToCsvString method like this:
 ```java
 String csv = Collection2Csv.convertToCsvString(usersList);
 ```
-The csv string will be:
+You will get the following CSV String:
 ```
 "name","lastName","phone"
 "John","Doe","555123123"
@@ -82,7 +100,7 @@ Then `Collection2Csv.convertToCsvString(usersList)` will return this CSV string:
 "Évariste","Galois","555121298"
 ```
 
-###Hiding class fields (CSV Columns):
+###Hiding class fields (CSV Columns)
 
 Sometimes you want to generate CSV strings without taking account some class fields,
 you can do this using the annotation `@CSVField(ignore=true)` to tell `convertToString` method to
