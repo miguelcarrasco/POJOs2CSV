@@ -5,7 +5,7 @@ Simple utility to convert generic collections (java.util.Collection) into CSV st
 
 This is specially useful when you get a collection like a list from an 
 [ORM](http://en.wikipedia.org/wiki/Object-relational_mapping) and you want to obtain
-a CSV string representation of the elements in the list (to generate spreesheet reports for example).
+a CSV String representation of the elements in the list (to generate spreesheet reports for example).
 
 Features
 -------
@@ -164,7 +164,7 @@ Then `Collection2Csv.convertToCsvString(usersList)` will return this CSV string:
 Limitations
 -----------
 * Currently it doesn't work with inheritance, i.e. if the type of objects in your collections extends from another
-class, the generated CSV String will not include the superclass fields (In future versions this will be supported).
+class, the generated CSV String will not include the superclass fields (In future versions it will be supported).
 
 Author
 ------
