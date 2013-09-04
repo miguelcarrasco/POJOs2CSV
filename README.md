@@ -10,8 +10,8 @@ a CSV String representation of the elements in the list (to generate spreesheet 
 Features
 -------
 * It generates [RFC4180](http://tools.ietf.org/html/rfc4180) compliant CSV Strings.
-* CSV headers are fully customizables.
-* You can hide columns (fields in collection classes) using annotations.
+* CSV headers are fully customizable.
+* You can hide columns (fields of the object type elements in the collection) using annotations.
 
 Usage
 -----
@@ -73,7 +73,8 @@ You will get the following CSV String:
 ```
 
 > Important: The collection must not be empty (it will throw a NoSuchElementException), because there is no way 
-to know the type of objects in the collection at runtime if the collection doesn't have at least one element.
+to know the type of objects in the collection at runtime (i.e. using reflection) if the collection 
+doesn't contains at least one element.
 
 > But If you know the type of objects in the collection, then you can use the method: 
 
@@ -86,7 +87,7 @@ to know the type of objects in the collection at runtime if the collection doesn
 > Collection2Csv.convertToCsvString(userList,User.class);
 > ```
 
-> And then, even if you collection is empty, it will generate a CSV String containing only the CSV Headers.
+> And then, even if you collection is empty, it will generate a CSV String containing the CSV Headers.
 
 ###Changing the CSV headers
 Sometimes, you want to change the CSV headers to more explicit values, for that purpose
@@ -163,7 +164,7 @@ Then `Collection2Csv.convertToCsvString(usersList)` will return this CSV string:
 
 Limitations
 -----------
-* Currently it doesn't work with inheritance, i.e. if the type of objects in your collections extends from another
+* Currently it doesn't work with inheritance, i.e. if the type of objects in your collection extends from another
 class, the generated CSV String will not include the superclass fields (In future versions it will be supported).
 
 Author
