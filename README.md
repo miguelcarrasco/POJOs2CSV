@@ -3,8 +3,15 @@ Collection2Csv
 
 Simple utility to convert generic collections (java.util.Collection) into CSV strings.
 
-This is special useful when you get a collection like a list from an ORM and you want
-a CSV string representation of the elements of the list (to generate reports for example).
+This is specially useful when you get a collection like a list from an 
+[ORM](http://en.wikipedia.org/wiki/Object-relational_mapping) and you want to obtain
+a CSV string representation of the elements in the list (to generate spreesheet reports for example).
+
+Features
+-------
+* It generates [RFC4180](http://tools.ietf.org/html/rfc4180) compliant CSV Strings.
+* CSV headers are fully customizables.
+* You can hide columns (fields in collection classes) using annotations.
 
 Usage
 -----
@@ -19,8 +26,8 @@ clone this repository and execute:
 > This will buid the project generating the jar file in `[REPOSITORY_DIR]/target/collection2csv-x.x.x-SNAPSHOT.jar`
 
 ###Transform a collection into a CSV String
-To transform a collection (any object that implement a subinterface of java.util.Collection like java.util.List or java.util.Set) into a CSV String,
-use the `convertToCsvString()` method:
+To transform a collection (any object that implement a subinterface of java.util.Collection like java.util.List or 
+java.util.Set) into a CSV String, use the `convertToCsvString()` method:
 
 ```java
 String csv = Collection2Csv.convertToCsvString(yourcollection);
@@ -64,6 +71,22 @@ You will get the following CSV String:
 "Andrey","Kolmogorov","888123123"
 "Évariste","Galois","555121298"
 ```
+
+> Important: The collection must not be empty (it will throw a NoSuchElementException), because there is no way 
+to know the type of objects in the collection at runtime if the collection doesn't have at least one element.
+
+> But If you know the type of objects in the collection, then you can use the method: 
+
+> ```java
+> Collection2Csv.convertToCsvString(yourcollection,YourObjectsType.class);
+> ```
+> For example:
+> ```java
+> List<User> userList = new ArrayList<User>();
+> Collection2Csv.convertToCsvString(userList,User.class);
+> ```
+
+> And then, even if you collection is empty, it will generate a CSV String containing only the CSV Headers.
 
 ###Changing the CSV headers
 Sometimes, you want to change the CSV headers to more explicit values, for that purpose
@@ -137,6 +160,11 @@ Then `Collection2Csv.convertToCsvString(usersList)` will return this CSV string:
 "Andrey","Kolmogorov"
 "Évariste","Galois"
 ```
+
+Limitations
+-----------
+* Currently it doesn't work with inheritance, i.e. if the type of objects in your collections extends from another
+class, the generated CSV String will not include the superclass fields (In future versions this will be supported).
 
 Author
 ------
