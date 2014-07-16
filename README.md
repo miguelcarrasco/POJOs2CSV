@@ -1,4 +1,4 @@
-POJOs2Csv
+POJOs2CSV
 ==============
 
 Simple utility to convert generic POJO collections (java.util.Collection) into CSV strings.
@@ -30,7 +30,7 @@ To transform a POJO collection (any object that implement a subinterface of java
 java.util.Set) into a CSV String, use the `convertToCsvString()` method:
 
 ```java
-String csv = POJOs2Csv.convertToCsvString(yourcollection);
+String csv = POJOs2CSV.convertToCsvString(yourcollection);
 ```
 
 ####Example
@@ -62,7 +62,7 @@ usersList.add(new User("Évariste","Galois",(long)555121298));
 
 Then, if you use the convertToCsvString method like this:
 ```java
-String csv = POJOs2Csv.convertToCsvString(usersList);
+String csv = POJOs2CSV.convertToCsvString(usersList);
 ```
 You will get the following CSV String:
 ```
@@ -79,12 +79,12 @@ doesn't contains at least one element.
 > But If you know the type of objects in the collection, then you can use the method: 
 
 > ```java
-> POJOs2Csv.convertToCsvString(yourcollection,YourObjectsType.class);
+> POJOs2CSV.convertToCsvString(yourcollection,YourObjectsType.class);
 > ```
 > For example:
 > ```java
 > List<User> userList = new ArrayList<User>();
-> POJOs2Csv.convertToCsvString(userList,User.class);
+> POJOs2CSV.convertToCsvString(userList,User.class);
 > ```
 
 > And then, even if your POJOs collection is empty, it will generate a CSV String containing the CSV Headers.
@@ -115,7 +115,7 @@ public class User{
     ...
 }
 ```
-Then `POJOs2Csv.convertToCsvString(usersList)` will return this CSV string:
+Then `POJOs2CSV.convertToCsvString(usersList)` will return this CSV string:
 
 ```
 "Name","Last Name","phone"
@@ -154,7 +154,7 @@ public class User{
     ...
 }
 ```
-Then `POJOs2Csv.convertToCsvString(usersList)` will return this CSV string:
+Then `POJOs2CSV.convertToCsvString(usersList)` will return this CSV string:
 ```
 "Name","Last Name"
 "John","Doe"

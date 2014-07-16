@@ -9,7 +9,7 @@ import java.util.*;
  * @author Miguel Angel Carrasco Wens
  * @version 1.0-SNAPSHOT
  */
-public class POJOs2Csv {
+public class POJOs2CSV {
 
     /**
      * Convert a collection of POJOs into a CSV String representation.

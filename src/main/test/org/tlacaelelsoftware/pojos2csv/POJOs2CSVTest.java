@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class POJOs2CsvTest {
+public class POJOs2CSVTest {
     @Test
     public void testConvertToCsvStringRFC4180Compliance() throws Exception {
         List<SimplePOJOForTest> list = new ArrayList<SimplePOJOForTest>();
@@ -28,7 +28,7 @@ public class POJOs2CsvTest {
                         "\"other \n \"\"user\"\"\",\"other@test.org, \"\"other2@test.org\"\"\",\"1\",\"555111222,\"\"555222111\"\"\"";
 
         Assert.assertEquals("The expected csv must be equal to the convertToCsvString() output",
-                expectedCsv, POJOs2Csv.convertToCsvString(list));
+                expectedCsv, POJOs2CSV.convertToCsvString(list));
     }
 
     @Test
@@ -43,7 +43,7 @@ public class POJOs2CsvTest {
                         "\"test, \"\"user\"\"\",\"another@test.org\",\"2\",\"12345\"";
 
         Assert.assertEquals("The expected csv must be equal to the convertToCsvString() output",
-                expectedCsv, POJOs2Csv.convertToCsvString(list));
+                expectedCsv, POJOs2CSV.convertToCsvString(list));
 
     }
 
@@ -58,7 +58,7 @@ public class POJOs2CsvTest {
                         "\"test, \"\"user\"\"\",\"another@test.org\",\"12345\"";
 
         Assert.assertEquals("The expected csv must be equal to the convertToCsvString() output",
-                expectedCsv, POJOs2Csv.convertToCsvString(list));
+                expectedCsv, POJOs2CSV.convertToCsvString(list));
     }
 
     @Test
@@ -72,7 +72,7 @@ public class POJOs2CsvTest {
                         "\"test, \"\"user\"\"\",\"another@test.org\",\"2\"";
 
         Assert.assertEquals("The expected csv must be equal to the convertToCsvString() output",
-                expectedCsv, POJOs2Csv.convertToCsvString(list));
+                expectedCsv, POJOs2CSV.convertToCsvString(list));
     }
 
     @Test
@@ -82,7 +82,7 @@ public class POJOs2CsvTest {
         String expectedCsv = "\"user\",\"email\",\"userId\"";
 
         try {
-            POJOs2Csv.convertToCsvString(list);
+            POJOs2CSV.convertToCsvString(list);
             Assert.fail("A NoSuchElementException must be throwed");
         } catch (NoSuchElementException e) {
             // Assert passed
