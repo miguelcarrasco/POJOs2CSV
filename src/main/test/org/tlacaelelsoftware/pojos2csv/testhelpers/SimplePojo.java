@@ -1,4 +1,4 @@
-package org.tlacaelelsoftware.collection2csv.testhelpers;
+package org.tlacaelelsoftware.pojos2csv.testhelpers;
 
 /**
  * This class was created because we want to test different behaviors for

@@ -1,4 +1,4 @@
-package org.tlacaelelsoftware.collection2csv.testhelpers;
+package org.tlacaelelsoftware.pojos2csv.testhelpers;
 
 /**
  * A Simple Plain Old Java Object (POJO) to test

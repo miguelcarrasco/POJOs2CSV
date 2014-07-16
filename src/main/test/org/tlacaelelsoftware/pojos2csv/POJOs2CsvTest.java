@@ -1,17 +1,17 @@
-package org.tlacaelelsoftware.collection2csv;
+package org.tlacaelelsoftware.pojos2csv;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.tlacaelelsoftware.collection2csv.testhelpers.SimpleAnnotatedPOJOForTest;
-import org.tlacaelelsoftware.collection2csv.testhelpers.SimpleAnnotatedPOJOForTest2;
-import org.tlacaelelsoftware.collection2csv.testhelpers.SimplePOJOForTest;
-import org.tlacaelelsoftware.collection2csv.testhelpers.SimplePojo;
+import org.tlacaelelsoftware.pojos2csv.testhelpers.SimpleAnnotatedPOJOForTest;
+import org.tlacaelelsoftware.pojos2csv.testhelpers.SimpleAnnotatedPOJOForTest2;
+import org.tlacaelelsoftware.pojos2csv.testhelpers.SimplePOJOForTest;
+import org.tlacaelelsoftware.pojos2csv.testhelpers.SimplePojo;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class Collection2CsvTest {
+public class POJOs2CsvTest {
     @Test
     public void testConvertToCsvStringRFC4180Compliance() throws Exception {
         List<SimplePOJOForTest> list = new ArrayList<SimplePOJOForTest>();
@@ -28,7 +28,7 @@ public class Collection2CsvTest {
                         "\"other \n \"\"user\"\"\",\"other@test.org, \"\"other2@test.org\"\"\",\"1\",\"555111222,\"\"555222111\"\"\"";
 
         Assert.assertEquals("The expected csv must be equal to the convertToCsvString() output",
-                expectedCsv, Collection2Csv.convertToCsvString(list));
+                expectedCsv, POJOs2Csv.convertToCsvString(list));
     }
 
     @Test
@@ -43,7 +43,7 @@ public class Collection2CsvTest {
                         "\"test, \"\"user\"\"\",\"another@test.org\",\"2\",\"12345\"";
 
         Assert.assertEquals("The expected csv must be equal to the convertToCsvString() output",
-                expectedCsv, Collection2Csv.convertToCsvString(list));
+                expectedCsv, POJOs2Csv.convertToCsvString(list));
 
     }
 
@@ -58,7 +58,7 @@ public class Collection2CsvTest {
                         "\"test, \"\"user\"\"\",\"another@test.org\",\"12345\"";
 
         Assert.assertEquals("The expected csv must be equal to the convertToCsvString() output",
-                expectedCsv, Collection2Csv.convertToCsvString(list));
+                expectedCsv, POJOs2Csv.convertToCsvString(list));
     }
 
     @Test
@@ -72,7 +72,7 @@ public class Collection2CsvTest {
                         "\"test, \"\"user\"\"\",\"another@test.org\",\"2\"";
 
         Assert.assertEquals("The expected csv must be equal to the convertToCsvString() output",
-                expectedCsv, Collection2Csv.convertToCsvString(list));
+                expectedCsv, POJOs2Csv.convertToCsvString(list));
     }
 
     @Test
@@ -82,7 +82,7 @@ public class Collection2CsvTest {
         String expectedCsv = "\"user\",\"email\",\"userId\"";
 
         try {
-            Collection2Csv.convertToCsvString(list);
+            POJOs2Csv.convertToCsvString(list);
             Assert.fail("A NoSuchElementException must be throwed");
         } catch (NoSuchElementException e) {
             // Assert passed

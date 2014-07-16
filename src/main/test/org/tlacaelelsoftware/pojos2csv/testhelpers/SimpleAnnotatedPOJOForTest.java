@@ -1,22 +1,22 @@
-package org.tlacaelelsoftware.collection2csv.testhelpers;
+package org.tlacaelelsoftware.pojos2csv.testhelpers;
 
-import org.tlacaelelsoftware.collection2csv.CSVField;
+import org.tlacaelelsoftware.pojos2csv.CSVField;
 
 /**
  * This is the SimplePOJOForTest but with different annotations, it was created
  * because in java it's impossible to override field annotations using inheritance.
  */
-public class SimpleAnnotatedPOJOForTest2 implements SimplePojo {
+public class SimpleAnnotatedPOJOForTest implements SimplePojo {
     @CSVField(name = "User")
     private String user;
 
     @CSVField(name = "Email")
     private String email;
 
-    @CSVField(name="UserId")
+    @CSVField(ignore = true)
     private Long userId;
 
-    @CSVField(ignore=true)
+    @CSVField(name="Phone")
     private String phone;
 
     // This fake constructor is used because we want to test the same values for different

@@ -1,4 +1,4 @@
-package org.tlacaelelsoftware.collection2csv;
+package org.tlacaelelsoftware.pojos2csv;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

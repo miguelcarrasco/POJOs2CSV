@@ -1,4 +1,4 @@
-package org.tlacaelelsoftware.collection2csv;
+package org.tlacaelelsoftware.pojos2csv;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -9,10 +9,10 @@ import java.util.*;
  * @author Miguel Angel Carrasco Wens
  * @version 1.0-SNAPSHOT
  */
-public class Collection2Csv {
+public class POJOs2Csv {
 
     /**
-     * Convert a collection of elements into a CSV String representation .
+     * Convert a collection of POJOs into a CSV String representation.
      *
      * @param collection a non-empty Collection.
      * @return a CSV String representation of the collection.
