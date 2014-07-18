@@ -43,20 +43,23 @@ public class POJOs2CSV {
         // Obtaining a list of fields using reflection
         List<Field> fieldsList = Arrays.asList(baseClass.getDeclaredFields());
 
+        // A StringBuilder is used instead string concatenations to improve performance.
+        StringBuilder csvSb = new StringBuilder();
+
         // Constructing the "csv header" row, using the field names
-        String csv = getCsvHeader(fieldsList) + "\n";
+        csvSb.append(getCsvHeader(fieldsList) + "\n");
 
         // Fill the content in the csv rows.
         Iterator iterator = collection.iterator();
         while (iterator.hasNext()) {
             Object obj = iterator.next();
-            csv += getCsvRow(obj, fieldsList);
+            csvSb.append(getCsvRow(obj, fieldsList));
             if (iterator.hasNext()) {
-                csv += "\n";
+                csvSb.append("\n");
             }
         }
 
-        return csv;
+        return csvSb.toString();
     }
 
     private static String getFieldContentAsCsv(Field field, Object obj) throws IllegalAccessException {
@@ -81,7 +84,7 @@ public class POJOs2CSV {
                 // If it's annotated with @CSVField(ignore=true) then...
                 if (csvFieldAnnotation.ignore()) {
                     // remove the last comma character if it's the last field in the row
-                    if(!iterator.hasNext()){
+                    if (!iterator.hasNext()) {
                         csvRow = removeLastCharacter(csvRow);
                     }
                     continue;
@@ -111,7 +114,7 @@ public class POJOs2CSV {
                 // If it's annotated with @CSVField(ignore=true) then...
                 if (csvFieldAnnotation.ignore()) {
                     // remove the last comma character if it's the last field in the row
-                    if(!fieldListIterator.hasNext()){
+                    if (!fieldListIterator.hasNext()) {
                         csvHeader = removeLastCharacter(csvHeader);
                     }
                     continue;
