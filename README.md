@@ -1,17 +1,18 @@
 POJOs2CSV
 ==============
 
-Simple utility to convert generic POJO collections (java.util.Collection) into CSV strings.
+Simple and lightweight library that convert POJO collections (java.util.Collection) into CSV (Comma Separated Values) strings and files.
 
 This is specially useful when you get a POJO collection like a list of entities from an
 [ORM](http://en.wikipedia.org/wiki/Object-relational_mapping) and you want to obtain
-a CSV String representation of the elements in the list (to generate spreesheet reports for example).
+a CSV representation of that entities (to generate spreesheet reports for example).
 
 Features
 -------
-* It generates [RFC4180](http://tools.ietf.org/html/rfc4180) compliant CSV Strings.
+* It generates [RFC4180](http://tools.ietf.org/html/rfc4180) compliant CSV.
 * CSV headers are fully customizable.
 * You can hide columns (fields of the object type elements in the collection) using annotations.
+* Optimized for large collections.
 
 Usage
 -----
@@ -88,6 +89,17 @@ doesn't contains at least one element.
 > ```
 
 > And then, even if your POJOs collection is empty, it will generate a CSV String containing the CSV Headers.
+
+###Writing to a file
+You can use the appendCsv method to write into a File:
+
+```java
+ Writer writer= new FileWriter("example.csv");
+ POJOs2CSV.appendCsv(userList, writer);
+ writer.close();
+```
+You can also use the appendCsv method to append the generated CSV into any Object that implements the Appendable interface
+(like FileWriter, PrintStream, PrintWriter, BufferedWriter, etc).
 
 ###Changing the CSV headers
 Sometimes, you want to change the CSV headers to more explicit values, for that purpose

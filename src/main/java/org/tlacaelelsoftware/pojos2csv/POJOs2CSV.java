@@ -1,5 +1,6 @@
 package org.tlacaelelsoftware.pojos2csv;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -19,14 +20,10 @@ public class POJOs2CSV {
      * @throws IllegalAccessException
      * @throws NoSuchElementException when the collection is empty.
      */
-    public static String convertToCsvString(Collection collection) throws IllegalAccessException, NoSuchElementException {
-        if (collection.isEmpty()) {
-            throw new NoSuchElementException("The specified collection must not be empty");
-        }
-        // Obtaining the base class of the objects in the list.
-        Class baseClass = collection.iterator().next().getClass();
-
-        return convertToCsvString(collection, baseClass);
+    public static String convertToCsvString(Collection collection) throws IllegalAccessException, NoSuchElementException, IOException {
+        StringBuilder csvSb = new StringBuilder();
+        appendCsv(collection, csvSb);
+        return csvSb.toString();
     }
 
     /**
@@ -38,29 +35,64 @@ public class POJOs2CSV {
      * @return a CSV String representation of the collection.
      * @throws IllegalAccessException
      */
-    public static String convertToCsvString(Collection collection, Class baseClass) throws IllegalAccessException {
+    public static String convertToCsvString(Collection collection, Class baseClass)
+            throws IllegalAccessException, IOException {
+        StringBuilder csvSb = new StringBuilder();
+        appendCsv(collection, csvSb, baseClass);
+        return csvSb.toString();
+    }
 
+    /**
+     * Appends the csv into an Object that implements the interface Appendable
+     *
+     * @param collection    a Collection
+     * @param csvAppendable an appendable object (like {@link java.io.FileWriter FileWriter},
+     *                      {@link java.lang.StringBuilder StringBuilder}, {@link java.io.PrintStream PrintStream} etc)
+     *                      in witch the csv will be appended.
+     * @throws IllegalAccessException
+     * @throws IOException
+     */
+    public static void appendCsv(Collection collection, Appendable csvAppendable)
+            throws IllegalAccessException, IOException {
+        if (collection.isEmpty()) {
+            throw new NoSuchElementException("The specified collection must not be empty");
+        }
+        // Obtaining the base class of the objects in the list.
+        Class baseClass = collection.iterator().next().getClass();
+        appendCsv(collection, csvAppendable, baseClass);
+    }
+
+    /**
+     * Appends the csv into an Object that implements the interface Appendable
+     *
+     * @param collection    a Collection
+     * @param csvAppendable an appendable object (like {@link java.io.FileWriter FileWriter},
+     *                      {@link java.lang.StringBuilder StringBuilder}, {@link java.io.PrintStream PrintStream} etc)
+     *                      in witch the csv will be appended.
+     * @param baseClass     the class of the collection elements, i.e. if the collection passed is a list of
+     *                      the type List<SomeClass>, then baseClass is SomeClass.class
+     * @throws IllegalAccessException
+     * @throws IOException
+     */
+    public static void appendCsv(Collection collection, Appendable csvAppendable, Class baseClass)
+            throws IllegalAccessException, IOException {
         // Obtaining a list of fields using reflection
         List<Field> fieldsList = Arrays.asList(baseClass.getDeclaredFields());
 
-        // A StringBuilder is used instead string concatenations to improve performance.
-        StringBuilder csvSb = new StringBuilder();
-
         // Constructing the "csv header" row, using the field names
-        csvSb.append(getCsvHeader(fieldsList) + "\n");
+        csvAppendable.append(getCsvHeader(fieldsList)).append('\n');
 
         // Fill the content in the csv rows.
         Iterator iterator = collection.iterator();
         while (iterator.hasNext()) {
             Object obj = iterator.next();
-            csvSb.append(getCsvRow(obj, fieldsList));
+            csvAppendable.append(getCsvRow(obj, fieldsList));
             if (iterator.hasNext()) {
-                csvSb.append("\n");
+                csvAppendable.append('\n');
             }
         }
-
-        return csvSb.toString();
     }
+
 
     private static String getFieldContentAsCsv(Field field, Object obj) throws IllegalAccessException {
         Object value = field.get(obj);
@@ -71,9 +103,9 @@ public class POJOs2CSV {
     }
 
     private static String getCsvRow(Object obj, List<Field> fieldsList) throws IllegalAccessException {
-        String csvRow = "";
-
         Iterator<Field> iterator = fieldsList.iterator();
+
+        List<String> fieldsInRow = new ArrayList<String>();
 
         while (iterator.hasNext()) {
             Field field = iterator.next();
@@ -83,27 +115,18 @@ public class POJOs2CSV {
             if (csvFieldAnnotation != null) {
                 // If it's annotated with @CSVField(ignore=true) then...
                 if (csvFieldAnnotation.ignore()) {
-                    // remove the last comma character if it's the last field in the row
-                    if (!iterator.hasNext()) {
-                        csvRow = removeLastCharacter(csvRow);
-                    }
                     continue;
                 }
             }
-
-            csvRow += "\"" + getFieldContentAsCsv(field, obj) + "\"";
-
-            if (iterator.hasNext()) {
-                csvRow += ",";
-            }
+            fieldsInRow.add("\"" + getFieldContentAsCsv(field, obj) + "\"");
         }
-        return csvRow;
+        return join(fieldsInRow, ",");
     }
 
     private static String getCsvHeader(List<Field> fieldsList) {
-        String csvHeader = "";
 
         Iterator<Field> fieldListIterator = fieldsList.iterator();
+        List<String> headers = new ArrayList<String>();
 
         while (fieldListIterator.hasNext()) {
             Field field = fieldListIterator.next();
@@ -113,32 +136,32 @@ public class POJOs2CSV {
 
                 // If it's annotated with @CSVField(ignore=true) then...
                 if (csvFieldAnnotation.ignore()) {
-                    // remove the last comma character if it's the last field in the row
-                    if (!fieldListIterator.hasNext()) {
-                        csvHeader = removeLastCharacter(csvHeader);
-                    }
                     continue;
                 } else {
                     // set the header field using the @CSVField(name="specified name") specified name
-                    csvHeader += "\"" + csvFieldAnnotation.name().replaceAll("\"", "\"\"") + "\"";
+                    headers.add("\"" + csvFieldAnnotation.name().replaceAll("\"", "\"\"") + "\"");
                 }
 
             } else {
-                csvHeader += "\"" + field.getName() + "\"";
-            }
-
-            if (fieldListIterator.hasNext()) {
-                csvHeader += ",";
+                headers.add("\"" + field.getName() + "\"");
             }
         }
 
-        return csvHeader;
+        return join(headers, ",");
     }
 
-    private static String removeLastCharacter(String str) {
-        if (str.length() > 0) {
-            str = str.substring(0, str.length() - 1);
+    private static String join(List<String> stringList, String separator) {
+        StringBuilder sb = new StringBuilder();
+        for (String value : stringList) {
+            sb.append(value);
+            sb.append(separator);
         }
-        return str;
+        int length = sb.length();
+        if (length > 0) {
+            // Remove the extra delimiter
+            sb.setLength(length - separator.length());
+        }
+        return sb.toString();
     }
+
 }
