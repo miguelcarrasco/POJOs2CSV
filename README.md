@@ -16,7 +16,7 @@ Features
 
 Usage
 -----
-Download [pojos2csv-1.0.0.jar](https://github.com/miguelcarrasco/collection2csv/releases/download/0.1.0-SNAPSHOT/pojos2csv-1.0.0.jar)
+Download [pojos2csv-1.0.0.jar](https://github.com/miguelcarrasco/collection2csv/releases/download/1.0.0/pojos2csv-1.0.0.jar)
 and put it in your project classpath.
 
 > If you want to build the latest jar version by yourself, you need to install [maven](http://maven.apache.org/), 
