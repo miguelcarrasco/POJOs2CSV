@@ -16,7 +16,7 @@ Features
 
 Usage
 -----
-Download [pojos2csv-0.1.0-SNAPSHOT.jar](https://github.com/miguelcarrasco/collection2csv/releases/download/0.1.0-SNAPSHOT/pojos2csv-0.1.0-SNAPSHOT.jar)
+Download [pojos2csv-1.0.0.jar](https://github.com/miguelcarrasco/collection2csv/releases/download/0.1.0-SNAPSHOT/pojos2csv-1.0.0.jar)
 and put it in your project classpath.
 
 > If you want to build the latest jar version by yourself, you need to install [maven](http://maven.apache.org/), 
@@ -24,7 +24,7 @@ clone this repository and execute:
 
 > `mvn package` (inside the repository directory)
 
-> This will buid the project generating the jar file in `[REPOSITORY_DIR]/target/collection2csv-x.x.x-SNAPSHOT.jar`
+> This will buid the project generating the jar file in `[REPOSITORY_DIR]/target/collection2csv-x.x.x.jar`
 
 ###Transform a POJO collection into a CSV String
 To transform a POJO collection (any object that implement a subinterface of java.util.Collection like java.util.List or
