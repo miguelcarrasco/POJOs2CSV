@@ -1,7 +1,7 @@
 POJOs2CSV
 ==============
 
-Simple and lightweight library that convert POJO collections (java.util.Collection) into CSV (Comma Separated Values) strings and files.
+Simple and lightweight library that convert POJO collections (like List, Set, Map, etc) into CSV (Comma Separated Values) strings and files.
 
 This is specially useful when you get a POJO collection like a list of entities from an
 [ORM](http://en.wikipedia.org/wiki/Object-relational_mapping) and you want to obtain
@@ -38,27 +38,27 @@ String csv = POJOs2CSV.convertToCsvString(yourcollection);
 Consider the following class:
 
 ```java
-public class User{
+public class User {
+    private Long id;
     private String name;
     private String lastName;
-    private Long phone;
 
-    public User(String name, String lastName, Long phone) {
+    public User(Long id, String name, String lastName) {
+        this.id = id;
         this.name = name;
         this.lastName = lastName;
-        this.phone = phone;
     }
-    
+
     // Getters, Setters and maybe others methods goes here
     ...
 }
 ```
 and the userList ArrayList, an implementation of java.util.List (a subinterface of java.util.Collection) of Users:
 ```java
-List<User> usersList = new ArrayList<User>();
-usersList.add(new User("John","Doe",(long)555123123));
-usersList.add(new User("Andrey","Kolmogorov",(long)888123123));
-usersList.add(new User("Évariste","Galois",(long)555121298));
+List<User> users = new ArrayList<User>();
+users.add(new User(1L, "Andrey", "Kolmogorov"));
+users.add(new User(2L, "Évariste", "Galois"));
+users.add(new User(3L, "David", "Hilbert"));
 ```
 
 Then, if you use the convertToCsvString method like this:
@@ -67,10 +67,10 @@ String csv = POJOs2CSV.convertToCsvString(usersList);
 ```
 You will get the following CSV String:
 ```
-"name","lastName","phone"
-"John","Doe","555123123"
-"Andrey","Kolmogorov","888123123"
-"Évariste","Galois","555121298"
+"id","name","lastName"
+"1","Andrey","Kolmogorov"
+"2","Évariste","Galois"
+"3","David","Hilbert"
 ```
 
 > Important: The collection must not be empty (it will throw a NoSuchElementException), because there is no way 
@@ -80,12 +80,12 @@ doesn't contains at least one element.
 > But If you know the type of objects in the collection, then you can use the method: 
 
 > ```java
-> POJOs2CSV.convertToCsvString(yourcollection,YourObjectsType.class);
+> POJOs2CSV.convertToCsvString(yourcollection, YourObjectsType.class);
 > ```
 > For example:
 > ```java
-> List<User> userList = new ArrayList<User>();
-> POJOs2CSV.convertToCsvString(userList,User.class);
+> List<User> users = new ArrayList<User>();
+> String csv = POJOs2CSV.convertToCsvString(users, User.class);
 > ```
 
 > And then, even if your POJOs collection is empty, it will generate a CSV String containing the CSV Headers.
@@ -94,7 +94,7 @@ doesn't contains at least one element.
 You can use the appendCsv method to write into a File:
 
 ```java
- Writer writer= new FileWriter("example.csv");
+ Writer writer = new FileWriter("example.csv");
  POJOs2CSV.appendCsv(userList, writer);
  writer.close();
 ```
@@ -108,70 +108,70 @@ you can use the `@CSVField` annotation.
 So, if we add the following annotations to the fields in the User class from the previous example:
 
 ```java
-public class User{
-    @CSVField(name="Name")
+public class User {
+    private Long id;
+
+    @CSVField(name = "Name")
     private String name;
 
-    @CSVField(name="Last Name")
+    @CSVField(name = "Last Name")
     private String lastName;
 
-    private Long phone;
-
-    public User(String name, String lastName, Long phone) {
+    public User(Long id, String name, String lastName) {
+        this.id = id;
         this.name = name;
         this.lastName = lastName;
-        this.phone = phone;
     }
-    
+
     // Getters, Setters and maybe others methods goes here
     ...
 }
 ```
-Then `POJOs2CSV.convertToCsvString(usersList)` will return this CSV string:
+Then `POJOs2CSV.convertToCsvString(users)` will return this CSV string:
 
 ```
-"Name","Last Name","phone"
-"John","Doe","555123123"
-"Andrey","Kolmogorov","888123123"
-"Évariste","Galois","555121298"
+"id","Name","Last Name"
+"1","Andrey","Kolmogorov"
+"2","Évariste","Galois"
+"3","David","Hilbert"
 ```
 
 ###Hiding class fields (CSV Columns)
 
 Sometimes you want to generate CSV strings without taking account some class fields,
-you can do this using the annotation `@CSVField(ignore=true)` to tell `convertToString` method to
+you can do this using the annotation `@CSVField(ignore = true)` to tell `convertToString` method to
 "ignore" that field.
 
-So in the previous example if we add the `@CSVField(ignore=true)` annotation to the phone field
+So in the previous example if we add the `@CSVField(ignore = true)` annotation to the id field
 in the User class:
 
 ```java
-public class User{
-    @CSVField(name="Name")
+public class User {
+    @CSVField(ignore = true)
+    private Long id;
+
+    @CSVField(name = "Name")
     private String name;
 
-    @CSVField(name="Last Name")
+    @CSVField(name = "Last Name")
     private String lastName;
 
-    @CSVField(ignore=true)
-    private Long phone;
-
-    public User(String name, String lastName, Long phone) {
+    public User(Long id, String name, String lastName) {
+        this.id = id;
         this.name = name;
         this.lastName = lastName;
-        this.phone = phone;
     }
-    
+
     // Getters, Setters and maybe others methods goes here
     ...
 }
 ```
-Then `POJOs2CSV.convertToCsvString(usersList)` will return this CSV string:
+Then `POJOs2CSV.convertToCsvString(users)` will return this CSV string:
 ```
 "Name","Last Name"
-"John","Doe"
 "Andrey","Kolmogorov"
 "Évariste","Galois"
+"David","Hilbert"
 ```
 
 Limitations
