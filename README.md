@@ -10,7 +10,7 @@ a CSV representation of that entities (to generate spreesheet reports for exampl
 Features
 -------
 * It generates [RFC4180](http://tools.ietf.org/html/rfc4180) compliant CSV.
-* CSV headers are fully customizable.
+* CSV headers can be configured using annotations.
 * You can hide columns (fields of the object type elements in the collection) using annotations.
 * Optimized for large collections.
 
