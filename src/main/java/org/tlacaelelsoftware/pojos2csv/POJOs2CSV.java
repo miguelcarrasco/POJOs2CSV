@@ -46,49 +46,49 @@ public class POJOs2CSV {
      * Appends the csv into an Object that implements the interface Appendable
      *
      * @param collection    a Collection
-     * @param csvAppendable an appendable object (like {@link java.io.FileWriter FileWriter},
+     * @param appendable    an appendable object (like {@link java.io.FileWriter FileWriter},
      *                      {@link java.lang.StringBuilder StringBuilder}, {@link java.io.PrintStream PrintStream} etc)
      *                      in witch the csv will be appended.
      * @throws IllegalAccessException
      * @throws IOException
      */
-    public static void appendCsv(Collection collection, Appendable csvAppendable)
+    public static void appendCsv(Collection collection, Appendable appendable)
             throws IllegalAccessException, IOException {
         if (collection.isEmpty()) {
             throw new NoSuchElementException("The specified collection must not be empty");
         }
         // Obtaining the base class of the objects in the list.
         Class baseClass = collection.iterator().next().getClass();
-        appendCsv(collection, csvAppendable, baseClass);
+        appendCsv(collection, appendable, baseClass);
     }
 
     /**
      * Appends the csv into an Object that implements the interface Appendable
      *
      * @param collection    a Collection
-     * @param csvAppendable an appendable object (like {@link java.io.FileWriter FileWriter},
+     * @param appendable    an appendable object (like {@link java.io.FileWriter FileWriter},
      *                      {@link java.lang.StringBuilder StringBuilder}, {@link java.io.PrintStream PrintStream} etc)
      *                      in witch the csv will be appended.
-     * @param baseClass     the class of the collection elements, i.e. if the collection passed is a list of
-     *                      the type List<SomeClass>, then baseClass is SomeClass.class
+     * @param baseClass the class of the collection elements, i.e. if the collection passed is a list of
+     *                  the type List<SomeClass>, then baseClass is SomeClass.class
      * @throws IllegalAccessException
      * @throws IOException
      */
-    public static void appendCsv(Collection collection, Appendable csvAppendable, Class baseClass)
+    public static void appendCsv(Collection collection, Appendable appendable, Class baseClass)
             throws IllegalAccessException, IOException {
         // Obtaining a list of fields using reflection
         List<Field> fieldsList = Arrays.asList(baseClass.getDeclaredFields());
 
         // Constructing the "csv header" row, using the field names
-        csvAppendable.append(getCsvHeader(fieldsList)).append('\n');
+        appendable.append(getCsvHeader(fieldsList)).append('\n');
 
         // Fill the content in the csv rows.
         Iterator iterator = collection.iterator();
         while (iterator.hasNext()) {
             Object obj = iterator.next();
-            csvAppendable.append(getCsvRow(obj, fieldsList));
+            appendable.append(getCsvRow(obj, fieldsList));
             if (iterator.hasNext()) {
-                csvAppendable.append('\n');
+                appendable.append('\n');
             }
         }
     }
