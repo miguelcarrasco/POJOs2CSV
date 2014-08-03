@@ -3,6 +3,7 @@ package org.tlacaelelsoftware.pojos2csv;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Contain methods to convert java.util.Collection collections into CSV String representations.
@@ -11,6 +12,7 @@ import java.util.*;
  * @version 1.0-SNAPSHOT
  */
 public class POJOs2CSV {
+    private static final Pattern p = Pattern.compile("\"");
 
     /**
      * Convert a collection of POJOs into a CSV String representation.
@@ -45,10 +47,10 @@ public class POJOs2CSV {
     /**
      * Appends the csv into an Object that implements the interface Appendable
      *
-     * @param collection    a Collection
-     * @param appendable    an appendable object (like {@link java.io.FileWriter FileWriter},
-     *                      {@link java.lang.StringBuilder StringBuilder}, {@link java.io.PrintStream PrintStream} etc)
-     *                      in witch the csv will be appended.
+     * @param collection a Collection
+     * @param appendable an appendable object (like {@link java.io.FileWriter FileWriter},
+     *                   {@link java.lang.StringBuilder StringBuilder}, {@link java.io.PrintStream PrintStream} etc)
+     *                   in witch the csv will be appended.
      * @throws IllegalAccessException
      * @throws IOException
      */
@@ -65,12 +67,12 @@ public class POJOs2CSV {
     /**
      * Appends the csv into an Object that implements the interface Appendable
      *
-     * @param collection    a Collection
-     * @param appendable    an appendable object (like {@link java.io.FileWriter FileWriter},
-     *                      {@link java.lang.StringBuilder StringBuilder}, {@link java.io.PrintStream PrintStream} etc)
-     *                      in witch the csv will be appended.
-     * @param baseClass the class of the collection elements, i.e. if the collection passed is a list of
-     *                  the type List<SomeClass>, then baseClass is SomeClass.class
+     * @param collection a Collection
+     * @param appendable an appendable object (like {@link java.io.FileWriter FileWriter},
+     *                   {@link java.lang.StringBuilder StringBuilder}, {@link java.io.PrintStream PrintStream} etc)
+     *                   in witch the csv will be appended.
+     * @param baseClass  the class of the collection elements, i.e. if the collection passed is a list of
+     *                   the type List<SomeClass>, then baseClass is SomeClass.class
      * @throws IllegalAccessException
      * @throws IOException
      */
@@ -79,14 +81,18 @@ public class POJOs2CSV {
         // Obtaining a list of fields using reflection
         List<Field> fieldsList = Arrays.asList(baseClass.getDeclaredFields());
 
+        for (Field field : fieldsList) {
+            field.setAccessible(true);
+        }
+
         // Constructing the "csv header" row, using the field names
-        appendable.append(getCsvHeader(fieldsList)).append('\n');
+        appendCsvHeader(fieldsList, appendable);
 
         // Fill the content in the csv rows.
         Iterator iterator = collection.iterator();
         while (iterator.hasNext()) {
             Object obj = iterator.next();
-            appendable.append(getCsvRow(obj, fieldsList));
+            appendCsvRow(obj,fieldsList,appendable);
             if (iterator.hasNext()) {
                 appendable.append('\n');
             }
@@ -99,17 +105,22 @@ public class POJOs2CSV {
         if (value == null) {
             return "";
         }
-        return value.toString().replaceAll("\"", "\"\"");
+
+        return replaceCommas(value.toString());
     }
 
-    private static String getCsvRow(Object obj, List<Field> fieldsList) throws IllegalAccessException {
-        Iterator<Field> iterator = fieldsList.iterator();
+    private static String replaceCommas(String string) {
+        if (string.contains("\"")) {
+            return p.matcher(string).replaceAll("\"\"");
+        } else {
+            return string;
+        }
+    }
 
-        List<String> fieldsInRow = new ArrayList<String>();
+    private static void appendCsvRow(Object obj, List<Field> fieldsList,Appendable appendable) throws IllegalAccessException, IOException {
 
-        while (iterator.hasNext()) {
-            Field field = iterator.next();
-            field.setAccessible(true);
+        String prefix = "";
+        for (Field field : fieldsList) {
 
             CSVField csvFieldAnnotation = field.getAnnotation(CSVField.class);
             if (csvFieldAnnotation != null) {
@@ -118,18 +129,17 @@ public class POJOs2CSV {
                     continue;
                 }
             }
-            fieldsInRow.add("\"" + getFieldContentAsCsv(field, obj) + "\"");
+            appendable.append(prefix).append("\"").append(getFieldContentAsCsv(field, obj)).append("\"");
+
+            prefix = ",";
         }
-        return join(fieldsInRow, ",");
+
     }
 
-    private static String getCsvHeader(List<Field> fieldsList) {
+    private static void appendCsvHeader(List<Field> fieldsList,Appendable appendable) throws IOException {
 
-        Iterator<Field> fieldListIterator = fieldsList.iterator();
-        List<String> headers = new ArrayList<String>();
-
-        while (fieldListIterator.hasNext()) {
-            Field field = fieldListIterator.next();
+        String prefix = "";
+        for (Field field : fieldsList) {
 
             CSVField csvFieldAnnotation = field.getAnnotation(CSVField.class);
             if (csvFieldAnnotation != null) {
@@ -139,29 +149,17 @@ public class POJOs2CSV {
                     continue;
                 } else {
                     // set the header field using the @CSVField(name="specified name") specified name
-                    headers.add("\"" + csvFieldAnnotation.name().replaceAll("\"", "\"\"") + "\"");
+                    appendable.append(prefix).append("\"").append(replaceCommas(csvFieldAnnotation.name())).append("\"");
                 }
 
             } else {
-                headers.add("\"" + field.getName() + "\"");
+                appendable.append(prefix).append("\"").append(field.getName()).append("\"");
             }
-        }
 
-        return join(headers, ",");
-    }
+            prefix = ",";
+        }
+        appendable.append("\n");
 
-    private static String join(List<String> stringList, String separator) {
-        StringBuilder sb = new StringBuilder();
-        for (String value : stringList) {
-            sb.append(value);
-            sb.append(separator);
-        }
-        int length = sb.length();
-        if (length > 0) {
-            // Remove the extra delimiter
-            sb.setLength(length - separator.length());
-        }
-        return sb.toString();
     }
 
 }
