@@ -1,7 +1,7 @@
 POJOs2CSV
 ==============
 
-Simple and lightweight library that convert POJO collections (like List, Set, Map, etc) into CSV (Comma Separated Values) strings and files.
+Simple and lightweight library that convert POJO collections (lists and sets) into CSV (Comma Separated Values) strings and files.
 
 This is specially useful when you get a POJO collection like a list of entities from an
 [ORM](http://en.wikipedia.org/wiki/Object-relational_mapping) and you want to obtain
@@ -10,7 +10,7 @@ a CSV representation of that entities (to generate spreesheet reports for exampl
 Features
 -------
 * It generates [RFC4180](http://tools.ietf.org/html/rfc4180) compliant CSV.
-* CSV headers are fully customizable.
+* CSV headers can be configured using annotations.
 * You can hide columns (fields of the object type elements in the collection) using annotations.
 * Optimized for large collections.
 
