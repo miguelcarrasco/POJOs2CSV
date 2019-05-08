@@ -26,7 +26,7 @@ clone this repository and execute:
 
 > This will buid the project generating the jar file in `[REPOSITORY_DIR]/target/collection2csv-x.x.x.jar`
 
-###Transform a POJO collection into a CSV String
+### Transform a POJO collection into a CSV String
 To transform a POJO collection (any object that implement a subinterface of java.util.Collection like java.util.List or
 java.util.Set) into a CSV String, use the `convertToCsvString()` method:
 
@@ -34,7 +34,7 @@ java.util.Set) into a CSV String, use the `convertToCsvString()` method:
 String csv = POJOs2CSV.convertToCsvString(yourcollection);
 ```
 
-####Example
+#### Example
 Consider the following class:
 
 ```java
@@ -90,7 +90,7 @@ doesn't contains at least one element.
 
 > And then, even if your POJOs collection is empty, it will generate a CSV String containing the CSV Headers.
 
-###Writing to a file
+### Writing to a file
 You can use the appendCsv method to write into a File:
 
 ```java
@@ -101,7 +101,7 @@ You can use the appendCsv method to write into a File:
 You can also use the appendCsv method to append the generated CSV into any Object that implements the Appendable interface
 (like FileWriter, PrintStream, PrintWriter, BufferedWriter, etc).
 
-###Changing the CSV headers
+### Changing the CSV headers
 Sometimes, you want to change the CSV headers to more explicit values, for that purpose
 you can use the `@CSVField` annotation.
 
@@ -136,7 +136,7 @@ Then `POJOs2CSV.convertToCsvString(users)` will return this CSV string:
 "3","David","Hilbert"
 ```
 
-###Hiding class fields (CSV Columns)
+### Hiding class fields (CSV Columns)
 
 Sometimes you want to generate CSV strings without taking account some class fields,
 you can do this using the annotation `@CSVField(ignore = true)` to tell `convertToString` method to
